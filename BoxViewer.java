@@ -1,7 +1,14 @@
-import javax.swing.*;
+import javax.swing.JFrame;
+import javax.swing.JButton;
+import javax.swing.JPanel;
+import javax.swing.JLabel;
+import javax.swing.JTextField;
+import javax.swing.BoxLayout;
+import javax.swing.JOptionPane;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
-import java.awt.*;
+
+import java.awt.Color;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -19,14 +26,14 @@ public class BoxViewer extends JFrame {
      * Constructs a BoxViewer window with the specified title.
      *
      * @param title The title of the BoxViewer window.
-     * This constructor sets the window title, size, default close operation, and layout.
-     * The size is initialized to 250 pixels in width and 275 pixels in height.
-     * The default close operation is set to exit the application when the window is closed.
-     * The layout manager is set to null, allowing custom positioning of components.
+     *              This constructor sets the window title, size, default close operation, and layout.
+     *              The size is initialized to 250 pixels in width and 275 pixels in height.
+     *              The default close operation is set to exit the application when the window is closed.
+     *              The layout manager is set to null, allowing custom positioning of components.
      */
     public BoxViewer(String title) {
         setTitle(title);
-        setSize(250, 275);
+        setSize(250, 325);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(null);
     }
@@ -66,16 +73,16 @@ public class BoxViewer extends JFrame {
          * Constructs a LabelTextPanel with a specified label.
          *
          * @param label The label to display alongside the text input field.
-         * This constructor initializes a LabelTextPanel, which includes a label and a text input field.
-         * The label is set to the specified text and displayed in red color.
-         * A text input field with a maximum length of 8 characters is created.
-         * KeyListener is added to the text input field to restrict input to digits and handle decimal input.
+         *              This constructor initializes a LabelTextPanel, which includes a label and a text input field.
+         *              The label is set to the specified text and displayed in red color.
+         *              A text input field with a maximum length of 8 characters is created.
+         *              KeyListener is added to the text input field to restrict input to digits and handle decimal input.
          */
         public LabelTextPanel(String label) {
             setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
             this.label = new JLabel(label);
             this.label.setForeground(Color.RED);
-            textField = new JTextField(8);
+            textField = new JTextField();
 
             textField.addKeyListener(new KeyAdapter() {
                 @Override
@@ -96,10 +103,19 @@ public class BoxViewer extends JFrame {
         }
 
         /**
-         * @return The text value from the JTextField
+         * @return The text value from the JTextField.
          */
         public String getTextValue() {
             return textField.getText();
+        }
+
+        /**
+         * setter for the JTextField
+         *
+         * @param text the text value to set the JTextField to.
+         */
+        public void setTextValue(String text) {
+            textField.setText(text);
         }
     }
 
@@ -190,11 +206,11 @@ public class BoxViewer extends JFrame {
 
         /*
             Initialize a container for the buttons.
-            Then initialize the 3 buttons: Calculate Volume, Calculate Surface Area and Show Box Details
+            Then initialize the 4 buttons: Calculate Volume, Calculate Surface Area, Show Box Details and Clear Values
             and provide them with Action Listeners.
          */
         var buttonsPanel = DrawVerticalPanel();
-        buttonsPanel.setBounds(STARTING_X_POS, STARTING_Y_POS + 100, 200, 100);
+        buttonsPanel.setBounds(STARTING_X_POS, STARTING_Y_POS + 125, 200, 125);
 
         var volBtn = DrawButton("Calculate Volume");
         volBtn.addActionListener((actionEvent) ->
@@ -207,16 +223,27 @@ public class BoxViewer extends JFrame {
         );
 
         var detailsBtn = DrawButton("Show Box Details");
-        detailsBtn.setBounds(STARTING_X_POS, STARTING_Y_POS + 200, 200, 30);
+        detailsBtn.setBounds(0, 0, 200, 30);
         detailsBtn.addActionListener(actionEvent -> {
             String displayString = "Length: " + box.getLength() + "\nWidth: " +
                     box.getWidth() + "\nHeight: " + box.getHeight();
             JOptionPane.showMessageDialog(boxViewer, displayString);
         });
 
+        var clearBtn = DrawButton("Clear Values");
+        clearBtn.setBounds(0, 0, 200, 30);
+        clearBtn.addActionListener(actionEvent -> {
+            lengthPanel.setTextValue("");
+            widthPanel.setTextValue("");
+            heightPanel.setTextValue("");
+            box.setLength("0");
+            box.setWidth("0");
+            box.setHeight("0");
+        });
         buttonsPanel.add(volBtn);
         buttonsPanel.add(surfaceAreaBtn);
         buttonsPanel.add(detailsBtn);
+        buttonsPanel.add(clearBtn);
 
         // Finally, add the dimensions panel and buttons panel to the BoxViewer and set to visible
         boxViewer.add(dimsPanel);

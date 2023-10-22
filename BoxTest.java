@@ -4,13 +4,14 @@ import static org.junit.jupiter.api.Assertions.*;
 
 public class BoxTest {
     @Test
-    void test_BoxInitializedProperly(){
+    void test_BoxInitializedProperly() {
         Box box = new Box(1., 2., 3.);
         assertNotNull(box);
         assertEquals(box.getLength(), 1.);
         assertEquals(box.getWidth(), 2.);
         assertEquals(box.getHeight(), 3.);
     }
+
     @Test
     void test_CalculateVolume() {
         Box box = new Box(2., 2., 2.);
